@@ -1,0 +1,45 @@
+h1 {
+    text-align: center;
+}
+
+
+button.init {
+    background-color: crimson;
+    color: white;
+    font-size: 1.5em;
+    display: block;
+    margin: auto;
+    width: 200px;
+}
+
+#power {
+    text-align: center;
+    height: 30px;
+    margin: 5px;
+    width: 0;
+    background: linear-gradient(90deg, rgba(16,57,37,1) 5%, rgba(210,74,74,1) 50%, rgba(178,18,18,1) 100%);
+    border-radius: 5px;
+}
+
+.container {
+    margin-top: 10px;
+    display: flex;
+}
+
+.imageContainer {
+    padding-left: 300px;
+    position: relative;
+    height: 800px;
+    min-width: 800px;
+}
+
+.imageContainer canvas {
+    position: absolute;
+}
+#dyn { 
+    z-index: 2; 
+
+    transition-property: all;
+    transition-timing-function: ease-out;
+}
+#base { z-index: 1; }
