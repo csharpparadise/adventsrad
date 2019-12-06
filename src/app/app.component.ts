@@ -8,7 +8,6 @@ import { TeamMateService } from 'src/services/team-mate.service';
 })
 
 export class AppComponent implements AfterViewInit {
-  names: string[];
 
   @ViewChild('canvas') staticCanvas: ElementRef;
   @ViewChild('canvas2') canvas: ElementRef;
@@ -16,12 +15,14 @@ export class AppComponent implements AfterViewInit {
   dynamicDrawContext: CanvasRenderingContext2D;
 
   start = 0;
-  interation = 500;
-  run = 0;
-  repeat = false;
   power = 0;
   powerAdd = -1;
   loadHandle: any;
+
+  rotationStyle: any;
+  rotationDuration: any;
+
+  player: HTMLAudioElement;
 
   constructor(private teamService: TeamMateService) {
   }
@@ -37,26 +38,30 @@ export class AppComponent implements AfterViewInit {
     this.dynamicDrawContext.imageSmoothingQuality = 'high';
     this.dynamicDrawContext.lineCap = 'round';
     this.dynamicDrawContext.translate(400, 400);
-}
+
+    this.player = new Audio();
+    this.player.src = '../../assets/drumRoll.mp3';
+    this.player.load();
+
+    this.drawCalender();
+  }
 
   reset() {
     console.log('reset');
     this.start = 0;
-    this.interation = 500;
-    this.run = 0;
-    this.repeat = false;
     this.power = 0;
     this.powerAdd = -1;
 
-    this.names = this.teamService.getPlayers();
+    this.rotationStyle = 'rotate(0deg)'; // transform: rotate(1080deg);
+    this.rotationDuration = '1ms';
   }
 
-  public setPower() {
+  setPower() {
     this.reset();
     this.loadHandle = setInterval(() => this.loadPower(), 5);
   }
 
-  public loadPower() {
+  loadPower() {
     if (this.power === 0 || this.power === 100) {
       this.powerAdd *= -1;
     }
@@ -68,14 +73,8 @@ export class AppComponent implements AfterViewInit {
 
   startAnimation() {
     clearInterval(this.loadHandle);
-
-    this.interation = this.power * this.interation / 100;
-    this.start = new Date().getSeconds();
-    this.repeat = true;
-
-    console.log('number of iterations: ' + this.interation);
-
-    requestAnimationFrame(() => this.drawCalender());
+    this.start = new Date().getMilliseconds() % 300;
+    this.startRotation();
   }
 
   drawStaticContent() {
@@ -94,15 +93,15 @@ export class AppComponent implements AfterViewInit {
   }
 
   drawCalender() {
-    this.calculateRotation();
+    const names = this.teamService.getPlayers();
 
     this.dynamicDrawContext.clearRect(-400, -400, 800, 800);
     this.dynamicDrawContext.rotate(this.start * Math.PI / 180);
 
-    const arrayLen = this.names.length;
+    const arrayLen = names.length;
 
     for (let i = 0; i < 36; i++) {
-      const currentMate = this.names[i % arrayLen];
+      const currentMate = names[i % arrayLen];
       this.dynamicDrawContext.fillText(currentMate, 200, 10, 180);
       this.dynamicDrawContext.rotate((5) * Math.PI / 180);
 
@@ -113,31 +112,36 @@ export class AppComponent implements AfterViewInit {
 
       this.dynamicDrawContext.rotate((5) * Math.PI / 180);
     }
-
-    this.run++;
-
-    // if (this.repeat === true && this.run < this.interation) {
-    //   this.start += this.easeOut(2)((this.interation - this.run) / this.interation) * 10;
-    //   requestAnimationFrame(() => this.drawCalender());
-    // }
   }
 
-  playAudio() {
-    const audio = new Audio();
-    audio.src = '../../assets/klick.mp3';
-    audio.load();
-    audio.play();
+  startRotation() {
+    const duration = this.setRotation();
+    this.playAudio(duration);
+  }
+
+  playAudio(duration: number) {
+    const startPos = this.player.duration * 1000 - duration - 2000;
+    this.player.currentTime = Math.round(startPos / 1000);
+    console.log('sound starts at ' + this.player.currentTime);
+    this.player.play();
   }
 
   easeOut(power: number) {
     return (t: number) => 1 - Math.abs(Math.pow(t - 1, power));
   }
 
-  calculateRotation() {
-    const MAX_ROTATION = 30 * 360;
+  setRotation(): number {
+    const MAX_ROTATION = 10 * 360;
 
-    const duration = Math.ceil(10 * this.power / 100);
+    const duration = Math.ceil(15 * this.power * 10); // ms
     const degree = Math.floor(this.start + MAX_ROTATION * this.power / 100);
-  }
 
+    console.log('duration: ' + duration);
+    console.log('degree: ' + degree);
+
+    this.rotationStyle = 'rotate(' + degree + 'deg)'; // transform: rotate(1080deg);
+    this.rotationDuration = duration + 'ms';
+
+    return duration;
+  }
 }

@@ -1,5 +1,5 @@
 <h1>
-  Adventsrad 2019 für die Minions
+  Adventsrad 2019 für die Minions2
 </h1>
 <div>
   <button class="init" (mousedown)="setPower()" (mouseup)="startAnimation()">Los!</button>
@@ -10,7 +10,7 @@
 <div class="container">
   <div class="imageContainer">
     <canvas #canvas id="base" width="802" height="802"></canvas>
-    <canvas #canvas2 id="dyn" width="800" height="800"></canvas>
+    <canvas #canvas2 id="dyn" width="800" height="800" [style.transition-duration]="rotationDuration" [style.transform]="rotationStyle"></canvas>
   </div>
   <div style="flex: 1"></div>
   <div>
