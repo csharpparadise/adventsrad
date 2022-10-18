@@ -46,6 +46,15 @@ export class AppComponent implements AfterViewInit {
     this.drawCalender();
   }
 
+  //Handlers
+  matesChangedHandler() {
+    console.log("mates changed");
+
+    this.drawCalender();
+  }
+
+  //private functions
+
   reset() {
     console.log('reset');
     this.start = 0;

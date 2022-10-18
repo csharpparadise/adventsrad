@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TeamMateService } from 'src/services/team-mate.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { TeamMateService } from 'src/services/team-mate.service';
   styleUrls: ['./mates.component.css']
 })
 export class MatesComponent implements OnInit {
+
+  @Output() onMatelistChanged = new EventEmitter<any>();
 
   members: string[] = [];
   constructor(private teamService: TeamMateService) {
@@ -21,12 +23,21 @@ export class MatesComponent implements OnInit {
   }
 
   public won(member: string) {
-    this.teamService.removePlayer(member);
-    this.loadMembers();
+    if (this.members.length > 1) {
+      this.teamService.removePlayer(member);
+      this.loadMembers();
+
+      this.onMatelistChanged.emit();
+    }
+    else {
+      this.reset();
+    }
   }
 
   public reset() {
     this.teamService.restorePlayers();
     this.loadMembers();
+
+    this.onMatelistChanged.emit();
   }
 }
