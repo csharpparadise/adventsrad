@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class TeamMateService {
 
-  readonly team = ['Danny', 'Alex', 'Daniel', 'Christof', 'Andreas', 'Uwe', 'Igor', 'Eric'];
+  readonly team = ['Ralph', 'Andre', 'Sylvia', 'Matthias', 'Patrick', 'Andreas'];
   readonly STORAGE_KEY = 'advent_players';
 
   constructor() { }
