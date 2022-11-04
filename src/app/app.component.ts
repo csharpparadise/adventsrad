@@ -9,10 +9,12 @@ import { TeamMateService } from 'src/services/team-mate.service';
 
 export class AppComponent implements AfterViewInit {
 
-  @ViewChild('canvas') staticCanvas: ElementRef;
-  @ViewChild('canvas2') canvas: ElementRef;
-  baseDrawContext: CanvasRenderingContext2D;
-  dynamicDrawContext: CanvasRenderingContext2D;
+  @ViewChild('canvas')
+  staticCanvas!: ElementRef;
+  @ViewChild('canvas2')
+  canvas!: ElementRef;
+  baseDrawContext!: CanvasRenderingContext2D;
+  dynamicDrawContext!: CanvasRenderingContext2D;
 
   start = 0;
   power = 0;
@@ -22,7 +24,7 @@ export class AppComponent implements AfterViewInit {
   rotationStyle: any;
   rotationDuration: any;
 
-  player: HTMLAudioElement;
+  player!: HTMLAudioElement;
 
   constructor(private teamService: TeamMateService) {
   }
@@ -77,7 +79,7 @@ export class AppComponent implements AfterViewInit {
 
     this.power += this.powerAdd;
     const displayPower = (window.innerWidth - 50) / 100 * this.power;
-    document.getElementById('power').style.width = displayPower + 'px';
+    document.getElementById('power')!.style.width = displayPower + 'px';
   }
 
   startAnimation() {

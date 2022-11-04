@@ -18,7 +18,7 @@ export class TeamMateService {
       return this.team;
     }
 
-    return JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+    return JSON.parse(playersInStore);
   }
 
   removePlayer(player: string) {
