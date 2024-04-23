@@ -16,6 +16,8 @@ export class AppComponent implements AfterViewInit {
   baseDrawContext!: CanvasRenderingContext2D;
   dynamicDrawContext!: CanvasRenderingContext2D;
 
+  currentYear = new Date().getFullYear();
+
   start = 0;
   power = 0;
   powerAdd = -1;
