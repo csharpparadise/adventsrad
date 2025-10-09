@@ -12,18 +12,32 @@ button {
     margin-bottom: 1em;
 }
 
+.editMode {
+    background-color: orange;
+    color: white;
+}
+
 button.reset {
     background-color: crimson;
 }
 
 .changeMates {
+    
+    margin-top: 3em;
+    
     background-color: #eee;
     color: #555;
 }
 
 .changeForm{
-    position: absolute;
-    top: 50px;
-    left: 100px;
-    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+.changeForm input {
+    padding: .2em;
+    width: 200px;
 }

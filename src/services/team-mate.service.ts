@@ -7,8 +7,19 @@ export class TeamMateService {
 
   readonly team = ['Ralf', 'André', 'Sylvia', 'Stefan', 'Patrick', 'Andreas'];
   readonly STORAGE_KEY = 'advent_players';
+  readonly BACKUP_KEY = 'advent_players_backup';
 
-  constructor() { }
+  constructor() {
+    this.initPlayerStorage();
+   }
+
+  initPlayerStorage() {
+    const advent_players_backup = localStorage.getItem(this.BACKUP_KEY);
+    if (!advent_players_backup) {
+      const playersJson = JSON.stringify(this.team);
+      localStorage.setItem(this.BACKUP_KEY, playersJson);
+    }
+  }
 
   getPlayers(): string[] {
     const playersInStore = localStorage.getItem(this.STORAGE_KEY);
@@ -21,17 +32,43 @@ export class TeamMateService {
     return JSON.parse(playersInStore);
   }
 
-  removePlayer(player: string) {
+  addPlayers(newPlayers: string[]) {
+    const playersInBackupStore = localStorage.getItem(this.BACKUP_KEY);
+    const players = playersInBackupStore ? JSON.parse(playersInBackupStore) : [];
+    players.push(...newPlayers);
+
+    const playersJson = JSON.stringify(players);
+    localStorage.setItem(this.BACKUP_KEY, playersJson);
+
+    const playersInGame = this.getPlayers();
+    playersInGame.push(...newPlayers);
+    const currentPlayersJson = JSON.stringify(playersInGame);
+    localStorage.setItem(this.STORAGE_KEY, currentPlayersJson);
+  }
+
+  removePlayer(player: string, isEditing: boolean) {
     const players = this.getPlayers();
     const index = players.indexOf(player);
     players.splice(index, 1);
 
     const playersJson = JSON.stringify(players);
     localStorage.setItem(this.STORAGE_KEY, playersJson);
+
+    if (isEditing) {
+      const playersInBackupStore = localStorage.getItem(this.BACKUP_KEY);
+      if (playersInBackupStore) {
+        const players = JSON.parse(playersInBackupStore);
+        const index = players.indexOf(player);
+        players.splice(index, 1);
+        localStorage.setItem(this.BACKUP_KEY, JSON.stringify(players));
+      } 
+    }
   }
 
   restorePlayers() {
-    const playersJson = JSON.stringify(this.team);
-    localStorage.setItem(this.STORAGE_KEY, playersJson);
+    const playersInBackupStore = localStorage.getItem(this.BACKUP_KEY);
+    if (playersInBackupStore) {
+      localStorage.setItem(this.STORAGE_KEY, playersInBackupStore);
+    }
   }
 }

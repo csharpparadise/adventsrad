@@ -52,9 +52,7 @@ export class AppComponent implements AfterViewInit {
 
   //Handlers
   matesChangedHandler() {
-    console.log("mates changed");
-
-    this.drawCalender();
+        this.drawCalender();
   }
 
   //private functions
