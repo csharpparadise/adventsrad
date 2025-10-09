@@ -15,3 +15,15 @@ button {
 button.reset {
     background-color: crimson;
 }
+
+.changeMates {
+    background-color: #eee;
+    color: #555;
+}
+
+.changeForm{
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    visibility: hidden;
+}

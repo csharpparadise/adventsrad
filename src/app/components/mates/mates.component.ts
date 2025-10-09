@@ -40,4 +40,9 @@ export class MatesComponent implements OnInit {
 
     this.onMatelistChanged.emit();
   }
+
+  editMateList() {
+    
+  }
+    
 }

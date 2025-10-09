@@ -2,3 +2,8 @@
 <button *ngFor="let member of members" (click)="won(member)">{{member}}</button>
 <button class="reset" (click)="reset()">Reset</button>
 
+<button class="changeMates" onclick="editMateList()">Change</button>
+
+<div [ngStyle]="" class="changeForm">
+ <b>Neue Namen eingeben</b>
+</div>
