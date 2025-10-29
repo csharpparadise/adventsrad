@@ -89,9 +89,9 @@ export class AppComponent implements AfterViewInit {
   }
 
   drawStaticContent() {
-    this.baseDrawContext.strokeStyle = 'rgba(255,0,0,0.8)';
+    this.baseDrawContext.strokeStyle = 'rgba(173, 34, 34, 0.8)';
     this.baseDrawContext.lineCap = 'round';
-    this.baseDrawContext.lineWidth = 1;
+    this.baseDrawContext.lineWidth = 3;
     this.baseDrawContext.beginPath();
     this.baseDrawContext.arc(401, 401, 400, 0, 2 * Math.PI);
     this.baseDrawContext.stroke();
