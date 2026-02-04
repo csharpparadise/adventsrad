@@ -1,11 +1,15 @@
 <h3>Pool</h3>
-<button *ngFor="let member of members" (click)="won(member)" [class.editMode]="isEditing">{{member}}</button>
+@for (member of members; track member) {
+  <button (click)="won(member)" [class.editMode]="isEditing">{{member}}</button>
+}
 <button class="reset" (click)="reset()">Reset</button>
 
 <button class="changeMates" (click)="editMateList()">{{isEditing ? 'Close' : 'Change'}}</button>
 
-<div *ngIf="isEditing" class="changeForm">
- <input type="text" [(ngModel)]="newMateName" placeholder="Namen mit Komma trennen"/>
- <button (click)="saveNewMate()">Save</button>
- <em>Alle Namen sind jetzt im Bearbeitungsmodus.</em>
-</div>
+@if (isEditing) {
+  <div class="changeForm">
+    <input type="text" [(ngModel)]="newMateName" placeholder="Namen mit Komma trennen"/>
+    <button (click)="saveNewMate()">Save</button>
+    <em>Alle Namen sind jetzt im Bearbeitungsmodus.</em>
+  </div>
+}
