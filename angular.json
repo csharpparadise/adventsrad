@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Adventsrad:build:production"
+              "buildTarget": "Adventsrad:build:production"
             },
             "development": {
-              "browserTarget": "Adventsrad:build:development"
+              "buildTarget": "Adventsrad:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Adventsrad:build"
+            "buildTarget": "Adventsrad:build"
           }
         },
         "test": {
