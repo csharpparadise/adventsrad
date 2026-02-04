@@ -2,9 +2,10 @@ import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { TeamMateService } from 'src/services/team-mate.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    standalone: false
 })
 
 export class AppComponent implements AfterViewInit {

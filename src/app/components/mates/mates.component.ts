@@ -2,9 +2,10 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TeamMateService } from 'src/services/team-mate.service';
 
 @Component({
-  selector: 'app-mates',
-  templateUrl: './mates.component.html',
-  styleUrls: ['./mates.component.css']
+    selector: 'app-mates',
+    templateUrl: './mates.component.html',
+    styleUrls: ['./mates.component.css'],
+    standalone: false
 })
 export class MatesComponent implements OnInit {
 
