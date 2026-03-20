@@ -8,7 +8,7 @@
 
 ## Problemstellung
 
-Die aktuelle Implementierung erlaubt nur die Eingabe mehrerer Namen gleichzeitig über ein kommagetrennte Texteingabe. Das ist wenig intuitiv und die UX ist unübersichtlich.
+Die aktuelle Implementierung erlaubt nur die Eingabe mehrerer Namen gleichzeitig über eine kommagetrennte Texteingabe. Das ist wenig intuitiv und die UX ist unübersichtlich.
 
 ## Ziel
 
@@ -23,7 +23,7 @@ Die aktuelle Implementierung erlaubt nur die Eingabe mehrerer Namen gleichzeitig
 ### Normalmodus (unverändert)
 
 - Namen werden als Buttons dargestellt
-- Klick auf einen Namen entfernt ihn aus dem aktiven Pool (Gewinner)
+- Klick auf einen Namen entfernt ihn aus dem aktiven Pool (Gewinner) — ruft `won(member)` auf
 - "Change"-Button öffnet den Edit-Modus
 - "Reset"-Button stellt die ursprüngliche Liste wieder her
 
@@ -31,12 +31,16 @@ Die aktuelle Implementierung erlaubt nur die Eingabe mehrerer Namen gleichzeitig
 
 **Namensliste:**
 - Jeder Name wird als Zeile dargestellt: `[Name]  [✕]`
-- ✕-Button entfernt den Eintrag sofort aus der Liste
-- Buttons wechseln nicht mehr die Farbe (kein `editMode`-Klick-zum-Entfernen mehr)
+- ✕-Button entfernt den Eintrag sofort und dauerhaft (`removePlayer(name, true)` — `isEditing: true` ist zwingend, damit auch der Backup-Store aktualisiert wird und Reset ihn nicht wiederherstellt)
+- ✕-Button ist deaktiviert (disabled), wenn noch genau ein Name in der Liste ist — ein leeres Rad wäre ein Fehlerfall
+- Mitglieder-Buttons reagieren im Edit-Modus nicht auf Klicks (`won()` wird nicht aufgerufen); der Klick-Handler wird im Template per `[disabled]="isEditing"` oder `(click)`-Guard deaktiviert
 
 **Hinzufügen:**
 - Eingabefeld für einen einzelnen Namen
-- "Hinzufügen"-Button (oder Taste Enter) übernimmt den Namen direkt
+- Hinzufügen per "Hinzufügen"-Button oder Enter-Taste (`(keyup.enter)="addMate()"`)
+- Leere oder nur-Whitespace-Eingaben werden abgelehnt (`trim() === ''` → kein Hinzufügen)
+- Bereits vorhandene Namen (Duplikate, Vergleich case-sensitive) werden abgelehnt
+- Nach dem Hinzufügen bleibt der Edit-Modus geöffnet; das Eingabefeld wird geleert
 - Kein Komma-Parsing mehr
 
 **Schließen:**
@@ -49,20 +53,28 @@ Die aktuelle Implementierung erlaubt nur die Eingabe mehrerer Namen gleichzeitig
 
 ### `mates.component.html`
 
-- Edit-Modus-Block: Namen als `<div>`-Zeilen mit ✕-Button statt als `<button class="editMode">`
-- Eingabefeld bleibt (`[(ngModel)]="newMateName"`), Placeholder wird zu "Name hinzufügen"
-- "Save"-Button wird zu "Hinzufügen"
-- Hinweistext `<em>` wird entfernt
+- Normalmodus: Mitglieder-Buttons mit `[disabled]="isEditing"` oder `*ngIf`/`@if`-Guard, damit sie im Edit-Modus nicht klickbar sind
+- Edit-Modus-Block: Namen als `<div>`-Zeilen mit ✕-`<button>` statt als `<button class="editMode">`
+  - ✕-Button: `[disabled]="members.length <= 1"`
+- Eingabefeld: Placeholder "Name hinzufügen", `(keyup.enter)="addMate()"`
+- "Hinzufügen"-Button ruft `addMate()` auf
+- "Save"-Button entfällt, Hinweistext `<em>` entfällt
 
 ### `mates.component.ts`
 
-- `saveNewMate()` umbenennen zu `addMate()` — kein Split auf Komma mehr, direktes Hinzufügen eines einzelnen Namens
-- `removePlayer()` bleibt unverändert, wird jetzt direkt vom ✕-Button aufgerufen
+- `saveNewMate()` wird zu `addMate()`:
+  - Trimmt die Eingabe, bricht ab wenn leer
+  - Prüft auf Duplikat (case-sensitive), bricht ab wenn vorhanden
+  - Ruft `teamService.addPlayers([this.newMateName.trim()])` auf (Array mit einem Element, passend zur Service-Signatur)
+  - Setzt `this.newMateName = ''` zurück
+  - Setzt `this.isEditing` **nicht** auf false — Edit-Modus bleibt offen
+- ✕-Button-Handler: ruft `teamService.removePlayer(name, true)` auf, dann `loadMembers()`, dann `onMatelistChanged.emit()` — konsistent mit `won()` und `reset()`
 
 ### `mates.component.css`
 
-- `.editMode`-Stil (orange Buttons) entfällt oder wird nicht mehr für Mitglieder-Buttons verwendet
-- Neue Stile für die Edit-Zeilen (Flexbox: Name links, ✕ rechts)
+- `.editMode`-Stil (orange Buttons im Edit-Modus) entfällt
+- Neue Stile für Edit-Zeilen: Flexbox, Name linksbündig, ✕-Button rechtsbündig
+- Deaktivierte ✕-Buttons erhalten reduzierten Opacity-Wert
 
 ---
 
