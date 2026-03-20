@@ -39,6 +39,7 @@ button.reset {
 
 .editRow span {
     flex: 1;
+    color: #222;
 }
 
 .removeBtn {
@@ -69,4 +70,5 @@ button.reset {
 .changeForm input {
     padding: .2em;
     width: 200px;
+    color: #222;
 }
