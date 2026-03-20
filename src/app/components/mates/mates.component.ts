@@ -49,7 +49,7 @@ export class MatesComponent implements OnInit {
     this.isEditing = !this.isEditing;
   }
 
-  addMate() {
+  public addMate() {
     const name = this.newMateName.trim();
     if (!name) return;
     if (this.members.includes(name)) return;
@@ -59,8 +59,8 @@ export class MatesComponent implements OnInit {
     this.onMatelistChanged.emit();
   }
 
-  removeMate(member: string) {
-    this.teamService.removePlayer(member, true);
+  public removeMate(member: string) {
+    this.teamService.removePlayer(member, true); // permanent: also removes from backup store
     this.loadMembers();
     this.onMatelistChanged.emit();
   }
