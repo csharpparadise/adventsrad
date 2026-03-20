@@ -1,15 +1,27 @@
 <h3>Pool</h3>
 @for (member of members; track member) {
-  <button (click)="won(member)" [class.editMode]="isEditing">{{member}}</button>
+  <button (click)="won(member)" [disabled]="isEditing">{{member}}</button>
 }
 <button class="reset" (click)="reset()">Reset</button>
 
 <button class="changeMates" (click)="editMateList()">{{isEditing ? 'Close' : 'Change'}}</button>
 
 @if (isEditing) {
+  <div class="editList">
+    @for (member of members; track member) {
+      <div class="editRow">
+        <span>{{member}}</span>
+        <button class="removeBtn" (click)="removeMate(member)" [disabled]="members.length <= 1">✕</button>
+      </div>
+    }
+  </div>
   <div class="changeForm">
-    <input type="text" [(ngModel)]="newMateName" placeholder="Namen mit Komma trennen"/>
-    <button (click)="addMate()">Save</button>
-    <em>Alle Namen sind jetzt im Bearbeitungsmodus.</em>
+    <input
+      type="text"
+      [(ngModel)]="newMateName"
+      placeholder="Name hinzufügen"
+      (keyup.enter)="addMate()"
+    />
+    <button (click)="addMate()">Hinzufügen</button>
   </div>
 }
