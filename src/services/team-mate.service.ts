@@ -57,11 +57,11 @@ export class TeamMateService {
     if (isEditing) {
       const playersInBackupStore = localStorage.getItem(this.BACKUP_KEY);
       if (playersInBackupStore) {
-        const players = JSON.parse(playersInBackupStore);
-        const index = players.indexOf(player);
-        players.splice(index, 1);
-        localStorage.setItem(this.BACKUP_KEY, JSON.stringify(players));
-      } 
+        const backupPlayers = JSON.parse(playersInBackupStore);
+        const backupIndex = backupPlayers.indexOf(player);
+        backupPlayers.splice(backupIndex, 1);
+        localStorage.setItem(this.BACKUP_KEY, JSON.stringify(backupPlayers));
+      }
     }
   }
 

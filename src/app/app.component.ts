@@ -22,6 +22,7 @@ export class AppComponent implements AfterViewInit {
   start = 0;
   power = 0;
   powerAdd = -1;
+  powerBarWidth = '0px';
   loadHandle: any;
 
   rotationStyle: any;
@@ -63,8 +64,9 @@ export class AppComponent implements AfterViewInit {
     this.start = 0;
     this.power = 0;
     this.powerAdd = -1;
+    this.powerBarWidth = '0px';
 
-    this.rotationStyle = 'rotate(0deg)'; // transform: rotate(1080deg);
+    this.rotationStyle = 'rotate(0deg)';
     this.rotationDuration = '1ms';
   }
 
@@ -80,7 +82,7 @@ export class AppComponent implements AfterViewInit {
 
     this.power += this.powerAdd;
     const displayPower = (window.innerWidth - 50) / 100 * this.power;
-    document.getElementById('power')!.style.width = displayPower + 'px';
+    this.powerBarWidth = displayPower + 'px';
   }
 
   startAnimation() {
@@ -108,6 +110,9 @@ export class AppComponent implements AfterViewInit {
     const names = this.teamService.getPlayers();
 
     this.dynamicDrawContext.clearRect(-400, -400, 800, 800);
+    // save() / restore() prevent the start-angle rotation from accumulating
+    // across multiple drawCalender() calls (e.g. when team members change).
+    this.dynamicDrawContext.save();
     this.dynamicDrawContext.rotate(this.start * Math.PI / 180);
 
     const arrayLen = names.length;
@@ -117,13 +122,14 @@ export class AppComponent implements AfterViewInit {
       this.dynamicDrawContext.fillText(currentMate, 200, 10, 180);
       this.dynamicDrawContext.rotate((5) * Math.PI / 180);
 
-      this.dynamicDrawContext.beginPath();       // Start a new path
-      this.dynamicDrawContext.moveTo(190, 0);  // Move the pen to (30, 50)
-      this.dynamicDrawContext.lineTo(398, 0);  // Draw a line to (150, 100)
-      this.dynamicDrawContext.stroke();          // Render the path
+      this.dynamicDrawContext.beginPath();
+      this.dynamicDrawContext.moveTo(190, 0);
+      this.dynamicDrawContext.lineTo(398, 0);
+      this.dynamicDrawContext.stroke();
 
       this.dynamicDrawContext.rotate((5) * Math.PI / 180);
     }
+    this.dynamicDrawContext.restore();
   }
 
   startRotation() {
@@ -135,7 +141,7 @@ export class AppComponent implements AfterViewInit {
     const startPos = this.player.duration * 1000 - duration - 2000;
     this.player.currentTime = Math.round(startPos / 1000);
     console.log('sound starts at ' + this.player.currentTime);
-    this.player.play();
+    this.player.play().catch(() => {});
   }
 
   easeOut(power: number) {
