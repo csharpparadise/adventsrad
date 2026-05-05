@@ -36,8 +36,7 @@ describe('AppComponent', () => {
     (window as any).Audio = jasmine.createSpy('Audio').and.returnValue(mockAudio);
 
     await TestBed.configureTestingModule({
-      declarations: [AppComponent, MatesComponent],
-      imports: [FormsModule],
+      imports: [AppComponent, MatesComponent, FormsModule],
     }).compileComponents();
   });
 

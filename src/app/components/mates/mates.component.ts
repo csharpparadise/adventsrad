@@ -1,11 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { TeamMateService } from 'src/services/team-mate.service';
 
 @Component({
+    standalone: true,
+    imports: [FormsModule],
     selector: 'app-mates',
     templateUrl: './mates.component.html',
     styleUrls: ['./mates.component.css'],
-    standalone: false
 })
 export class MatesComponent implements OnInit {
 
