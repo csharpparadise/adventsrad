@@ -39,7 +39,8 @@ button.reset {
 
 .editRow span {
     flex: 1;
-    color: #222;
+    background-color: lightcoral;
+    padding: 0.2em;
 }
 
 .removeBtn {
