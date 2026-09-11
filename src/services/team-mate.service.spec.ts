@@ -35,6 +35,15 @@ describe('TeamMateService', () => {
       localStorage.removeItem('advent_players');
       expect(service.getPlayers()).toEqual(['Ralf', 'André', 'Sylvia', 'Stefan', 'Patrick', 'Andreas']);
     });
+
+    it('should recover from malformed active storage', () => {
+      localStorage.setItem('advent_players', 'not valid JSON');
+
+      expect(service.getPlayers()).toEqual(['Ralf', 'André', 'Sylvia', 'Stefan', 'Patrick', 'Andreas']);
+      expect(JSON.parse(localStorage.getItem('advent_players')!)).toEqual([
+        'Ralf', 'André', 'Sylvia', 'Stefan', 'Patrick', 'Andreas',
+      ]);
+    });
   });
 
   describe('addPlayers', () => {
@@ -47,6 +56,16 @@ describe('TeamMateService', () => {
       service.addPlayers(['Alice']);
       const backup = JSON.parse(localStorage.getItem('advent_players_backup')!);
       expect(backup).toContain('Alice');
+    });
+
+    it('should not duplicate a player that remains in the backup after winning', () => {
+      service.getPlayers();
+      service.removePlayer('Ralf', false);
+      service.addPlayers(['Ralf']);
+
+      const backup = JSON.parse(localStorage.getItem('advent_players_backup')!);
+      expect(backup.filter((player: string) => player === 'Ralf')).toHaveSize(1);
+      expect(service.getPlayers().filter(player => player === 'Ralf')).toHaveSize(1);
     });
   });
 

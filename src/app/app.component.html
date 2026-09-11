@@ -2,7 +2,16 @@
   Adventsrad {{currentYear}} für Application Services DACH Advisory
 </h1>
 <div>
-  <button class="init" (mousedown)="setPower()" (mouseup)="startAnimation()">Los!</button>
+  <button
+    class="init"
+    (pointerdown)="setPower($event)"
+    (pointerup)="startAnimation($event)"
+    (pointercancel)="cancelPower()"
+    (keydown.space)="setPower()"
+    (keyup.space)="startAnimation()"
+    (keydown.enter)="setPower()"
+    (keyup.enter)="startAnimation()"
+  >Los!</button>
 </div>
 
 <div id="power" [style.width]="powerBarWidth"></div>

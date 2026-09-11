@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { TeamMateService } from 'src/services/team-mate.service';
 import { MatesComponent } from './components/mates/mates.component';
 
@@ -10,7 +10,7 @@ import { MatesComponent } from './components/mates/mates.component';
     styleUrls: ['./app.component.css'],
 })
 
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('canvas')
   staticCanvas!: ElementRef;
@@ -25,7 +25,7 @@ export class AppComponent implements AfterViewInit {
   power = 0;
   powerAdd = -1;
   powerBarWidth = '0px';
-  loadHandle: any;
+  loadHandle?: ReturnType<typeof setInterval>;
 
   rotationStyle: any;
   rotationDuration: any;
@@ -54,6 +54,10 @@ export class AppComponent implements AfterViewInit {
     this.drawCalender();
   }
 
+  ngOnDestroy() {
+    this.stopLoading();
+  }
+
   //Handlers
   matesChangedHandler() {
         this.drawCalender();
@@ -72,8 +76,15 @@ export class AppComponent implements AfterViewInit {
     this.rotationDuration = '1ms';
   }
 
-  setPower() {
+  setPower(event?: PointerEvent) {
+    this.stopLoading();
     this.reset();
+
+    const button = event?.currentTarget as HTMLElement | null;
+    if (button && event) {
+      button.setPointerCapture(event.pointerId);
+    }
+
     this.loadHandle = setInterval(() => this.loadPower(), 5);
   }
 
@@ -87,10 +98,21 @@ export class AppComponent implements AfterViewInit {
     this.powerBarWidth = displayPower + 'px';
   }
 
-  startAnimation() {
-    clearInterval(this.loadHandle);
+  startAnimation(event?: PointerEvent) {
+    this.stopLoading();
+
+    const button = event?.currentTarget as HTMLElement | null;
+    if (button && event && button.hasPointerCapture(event.pointerId)) {
+      button.releasePointerCapture(event.pointerId);
+    }
+
     this.start = new Date().getMilliseconds() % 300;
     this.startRotation();
+  }
+
+  cancelPower() {
+    this.stopLoading();
+    this.reset();
   }
 
   drawStaticContent() {
@@ -148,6 +170,13 @@ export class AppComponent implements AfterViewInit {
 
   easeOut(power: number) {
     return (t: number) => 1 - Math.abs(Math.pow(t - 1, power));
+  }
+
+  private stopLoading() {
+    if (this.loadHandle !== undefined) {
+      clearInterval(this.loadHandle);
+      this.loadHandle = undefined;
+    }
   }
 
   setRotation(): number {
