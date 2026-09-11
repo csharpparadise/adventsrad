@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { TeamMateService } from 'src/services/team-mate.service';
 import { MatesComponent } from './components/mates/mates.component';
 
@@ -7,6 +7,7 @@ import { MatesComponent } from './components/mates/mates.component';
     imports: [MatesComponent],
     selector: 'app-root',
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./app.component.css'],
 })
 

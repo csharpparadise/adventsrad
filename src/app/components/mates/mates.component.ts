@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TeamMateService } from 'src/services/team-mate.service';
 
@@ -7,6 +7,7 @@ import { TeamMateService } from 'src/services/team-mate.service';
     imports: [FormsModule],
     selector: 'app-mates',
     templateUrl: './mates.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./mates.component.css'],
 })
 export class MatesComponent implements OnInit {
