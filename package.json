@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^22.1.8",
-    "@angular/cli": "^22.1.8",
+    "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.1.6",
     "@types/jasmine": "~4.0.0",
     "istanbul-lib-instrument": "^6.0.3",
